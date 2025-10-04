@@ -63,22 +63,29 @@
                 });
         }
 
+        // Assignment #3 Handle JWT expired → reload to root
         function getDashboard() {
             const token = localStorage.getItem('jwt');
             axios.get('/api/dashboard', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
-            }
-            ).then(res => {
+            }).then(res => {
                 if (res && res.data && res.data.success) {
                     document.querySelector('h1.row').innerText = 'Dashboard';
                     document.querySelector('main').innerHTML = res.data.myContent;
+                }
+            }).catch(err => {
+                console.error("Dashboard error:", err);
+                if (err.response && err.response.status === 401) {
+                    localStorage.removeItem('jwt');
+                    window.location = "/";
                 }
             });
         }
 
         // 1. Create 1 more route (called settings) and protect this route with the JWT solution
+        // Assignment #3 Handle JWT expired → reload to root
         function getSettings() {
             const token = localStorage.getItem('jwt');
             axios.get('/api/settings', {
@@ -90,8 +97,15 @@
                     document.querySelector('h1.row').innerText = 'Settings';
                     document.querySelector('main').innerHTML = res.data.myContent;
                 }
+            }).catch(err => {
+                console.error("Settings error:", err);
+                if (err.response && err.response.status === 401) {
+                    localStorage.removeItem('jwt'); 
+                    window.location = "/";          
+                }
             });
         }
+
 
 
 

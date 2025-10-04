@@ -49,7 +49,8 @@ app.post('/api/login', (req, res) => {
     const token = jwt.sign(
         { id: user.id, username: user.username },
         secretKey,
-        { expiresIn: '7d' }
+        // Assignment #3 Set JWT expire time to 3 minutes
+        { expiresIn: '3m' }
     );
 
     return res.json({
