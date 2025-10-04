@@ -7,10 +7,7 @@
     <title>Document</title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.2.0/axios.min.js"> -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
-    </script>
 </head>
 
 <body>
@@ -31,20 +28,16 @@
                 <input type="password" name="password" id="password">
                 <div>
 
-                    <!-- 2. Add a button on the Homepage so you can access the new route "settings" -->
+                    <!-- Assignment #2 Add a button on the Homepage so you can access the new route "settings" -->
                     <div>
                         <button onclick="navigate('dashboard')">Dashboard</button>
                         <button onclick="navigate('settings')">Settings</button>
                         <button onclick="navigate('home')">Home</button>
                     </div>
-
-
         </main>
-
     </div>
 
     <script>
-
         function login() {
             const data = {
                 username: document.getElementById("username").value,
@@ -58,12 +51,11 @@
                     if (res && res.data && res.data.success) {
                         const token = res.data.token;
                         localStorage.setItem('jwt', token);
-                        // getDashboard();
                     }
                 });
         }
 
-        // Assignment #3 Handle JWT expired → reload to root
+        // Assignment #5 In the frontend, implement some code so that if JWT is expired, then the page will reload on the root address
         function getDashboard() {
             const token = localStorage.getItem('jwt');
             axios.get('/api/dashboard', {
@@ -84,8 +76,8 @@
             });
         }
 
-        // 1. Create 1 more route (called settings) and protect this route with the JWT solution
-        // Assignment #3 Handle JWT expired → reload to root
+        // Assignment #1 Create 1 more route (called settings) and protect this route with the JWT solution
+        // Assignment #5 In the frontend, implement some code so that if JWT is expired, then the page will reload on the root address
         function getSettings() {
             const token = localStorage.getItem('jwt');
             axios.get('/api/settings', {
@@ -100,16 +92,14 @@
             }).catch(err => {
                 console.error("Settings error:", err);
                 if (err.response && err.response.status === 401) {
-                    localStorage.removeItem('jwt'); 
-                    window.location = "/";          
+                    localStorage.removeItem('jwt');
+                    window.location = "/";
                 }
             });
         }
 
-
-
-
-        // 2. Add a button on the Homepage so you can access the new route "settings"
+        // Assignment #3 Use the HTML5 API History.pushstate to update the URL when you change routes
+        // Assignment #2 Add a button on the Homepage so you can access the new route "settings"
         function navigate(route) {
             if (route === 'home') {
                 history.pushState({ page: 'home' }, null, '/');
@@ -122,6 +112,8 @@
                 getSettings();
             }
         }
+
+        // Assignment #3 Use the HTML5 API History.pushstate to update the URL when you change routes
         window.addEventListener('popstate', function (event) {
             if (!event.state) {
                 renderHome();
@@ -135,6 +127,7 @@
                 renderHome();
             }
         });
+
         function renderHome() {
             document.querySelector('h1.row').innerText = 'Login here';
             document.querySelector('main').innerHTML = `
@@ -154,6 +147,8 @@
      </div>
     `;
         }
+
+        // Assignment #3 Use the HTML5 API History.pushstate to update the URL when you change routes
         window.onload = function () {
             const path = window.location.pathname;
             if (path === '/dashboard') {
@@ -164,9 +159,7 @@
                 renderHome();
             }
         }
-
     </script>
-
 </body>
 
 </html>

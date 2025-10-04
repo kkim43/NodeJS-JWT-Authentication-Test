@@ -27,7 +27,6 @@ let users = [
 ];  
 
 app.post('/api/login', (req, res) => {
-
     const { username, password } = req.body;
     const user = users.find(u => u.username === username);
 
@@ -46,11 +45,11 @@ app.post('/api/login', (req, res) => {
         });
     }
 
+    // Assignment #4 In the NodeJS, change the JWT expire to 3 minutes
     const token = jwt.sign(
         { id: user.id, username: user.username },
         secretKey,
-        // Assignment #3 Set JWT expire time to 3 minutes
-        { expiresIn: '3m' }
+        { expiresIn: '3m' }   
     );
 
     return res.json({
@@ -64,9 +63,8 @@ app.get('/api/dashboard', jwtMW, (req, res) => {
     res.json({
         success: true,
         myContent: 'Secret content that only logged in people can see'
-        });
+    });
 });
-
 
 app.get('/api/prices', jwtMW, (req, res) => {
     res.json({
@@ -75,14 +73,13 @@ app.get('/api/prices', jwtMW, (req, res) => {
     });
 });
 
-// 1. Create 1 more route (called settings) and protect this route with the JWT solution
+// Assignment #1 Create 1 more route (called settings) and protect this route with the JWT solution
 app.get('/api/settings', jwtMW, (req, res) => {
     res.json({
         success: true,
         myContent: 'This is your settings page. Only logged in users can see this!'
     });
 });
-
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
