@@ -66,12 +66,22 @@ app.get('/api/dashboard', jwtMW, (req, res) => {
         });
 });
 
+
 app.get('/api/prices', jwtMW, (req, res) => {
     res.json({
         success: true,
         myContent: 'this is the price $3.99'
     });
 });
+
+// 1. Create 1 more route (called settings) and protect this route with the JWT solution
+app.get('/api/settings', jwtMW, (req, res) => {
+    res.json({
+        success: true,
+        myContent: 'This is your settings page. Only logged in users can see this!'
+    });
+});
+
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
