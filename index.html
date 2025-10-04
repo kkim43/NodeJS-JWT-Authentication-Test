@@ -31,11 +31,13 @@
                 <input type="password" name="password" id="password">
                 <div>
 
+                    <!-- 2. Add a button on the Homepage so you can access the new route "settings" -->
                     <div>
-                        <button onclick="login()">Login</button>
-                        <button onclick="getDashboard()">Get Dashboard</button>
-                        <button onclick="getSettings()">Get Settings</button>
+                        <button onclick="navigate('dashboard')">Dashboard</button>
+                        <button onclick="navigate('settings')">Settings</button>
+                        <button onclick="navigate('home')">Home</button>
                     </div>
+
 
         </main>
 
@@ -91,14 +93,63 @@
             });
         }
 
-        // function onLoad() {
-        //     const token = localStorage.getItem('jwt');
-        //     if (token) {
-        //         getDashboard();
-        //     }
-        // }
 
-        // onLoad();
+
+        // 2. Add a button on the Homepage so you can access the new route "settings"
+        function navigate(route) {
+            if (route === 'home') {
+                history.pushState({ page: 'home' }, null, '/');
+                renderHome();
+            } else if (route === 'dashboard') {
+                history.pushState({ page: 'dashboard' }, null, '/dashboard');
+                getDashboard();
+            } else if (route === 'settings') {
+                history.pushState({ page: 'settings' }, null, '/settings');
+                getSettings();
+            }
+        }
+        window.addEventListener('popstate', function (event) {
+            if (!event.state) {
+                renderHome();
+                return;
+            }
+            if (event.state.page === 'dashboard') {
+                getDashboard();
+            } else if (event.state.page === 'settings') {
+                getSettings();
+            } else {
+                renderHome();
+            }
+        });
+        function renderHome() {
+            document.querySelector('h1.row').innerText = 'Login here';
+            document.querySelector('main').innerHTML = `
+     <div class="row">
+         <label for="username">Username</label>
+         <input type="text" name="username" id="username">
+     </div>
+     <div class="row">
+         <label for="password">password</label>
+         <input type="password" name="password" id="password">
+     </div>
+     <div>
+         <button onclick="login()">Login</button>
+         <button onclick="navigate('dashboard')">Dashboard</button>
+         <button onclick="navigate('settings')">Settings</button>
+         <button onclick="navigate('home')">Home</button> 
+     </div>
+    `;
+        }
+        window.onload = function () {
+            const path = window.location.pathname;
+            if (path === '/dashboard') {
+                navigate('dashboard');
+            } else if (path === '/settings') {
+                navigate('settings');
+            } else {
+                renderHome();
+            }
+        }
 
     </script>
 
